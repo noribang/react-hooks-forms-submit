@@ -5,6 +5,7 @@ function Form() {
   const [firstName, setFirstName] = useState("Sylvia");
   const [lastName, setLastName] = useState("Woods");
   const [submittedData, setSubmittedData] = useState([]);
+  const [errors, setErrors] = useState([]);
 
   /* Event handlers passed as props. */
   function handleFirstNameChange(event) {
@@ -18,20 +19,27 @@ function Form() {
   function handleSubmit(event) {
     // Prevent default page reload.
     event.preventDefault();
-    // Get object values from state values.
-    const formData = {
-      firstName: firstName,
-      lastName: lastName
-    } 
-    const dataArray = [...submittedData, formData];
-    console.log(dataArray)
-    setSubmittedData(dataArray);
-    // Send form state values from object.
-    // props.sendFormDataSomewhere(formData);
-    
-    // Call setter functions to clear input fields. 
-    setFirstName("");
-    setLastName("");
+    /* first name is required. */
+    if (firstName.length > 0) {
+      // Get object values from state values.
+      const formData = {
+        firstName: firstName,
+        lastName: lastName
+      } 
+      const dataArray = [...submittedData, formData];
+      console.log(dataArray)
+      /* Change state. */
+      setSubmittedData(dataArray);
+      // Send form state values from object.
+      // props.sendFormDataSomewhere(formData);
+      /* Call setter functions to clear input fields. */ 
+      setFirstName("");
+      setLastName("");
+      setErrors([]);
+    } else {
+      setErrors(["First name is required!"])
+    }
+
   }
 
   const listOfSubmissions = submittedData.map((data, index) => {
@@ -41,7 +49,7 @@ function Form() {
       </div>
     );
   });
-
+  /* JSX */
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -50,6 +58,15 @@ function Form() {
         <input type="text" onChange={handleLastNameChange} value={lastName} />
         <button type="submit">Submit</button>
       </form>
+      {/* Conditionally render error messages. */}
+      {errors.length > 0 
+        ? errors.map((error, index) => (
+          <p key={index} style={{ color: "red"}}>
+            {error}
+          </p>
+        )) 
+        : null}
+
       <h3>Submissions</h3>
       {listOfSubmissions}
     </div>
