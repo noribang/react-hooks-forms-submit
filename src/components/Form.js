@@ -10,6 +10,7 @@ function Form() {
   /* Event handlers passed as props. */
   function handleFirstNameChange(event) {
     setFirstName(event.target.value);
+    console.log(firstName)
   }
   function handleLastNameChange(event) {
     setLastName(event.target.value);
